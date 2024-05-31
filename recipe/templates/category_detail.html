@@ -1,13 +1,13 @@
 {% extends 'base.html' %}
 
-
 {% block content %}
   <h1>Category List</h1>
   <ul>
-    {% for recipe in category %}
-      <li>{{ recipe.title }}</li>
+    {% for recipe in recipes %}
+      <li><a href="{% url 'recipe_detail' recipe.id %}">{{ recipe.title }}</a></li>
     {% empty %}
       <li>No recipes found.</li>
     {% endfor %}
   </ul>
+  <a href="{% url 'main' %}" class="btn btn-primary mt-3">Повернутись на головну </a>
 {% endblock %}
