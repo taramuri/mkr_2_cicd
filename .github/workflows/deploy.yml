@@ -27,22 +27,28 @@ jobs:
         run: |
           pip install flake8
           flake8 || true  # Continue on error to report all issues
+        # Archive Flake8 report as artifact
+        - name: Archive Flake8 report
+          if: always()  # Always archive, even if previous steps fail
+          uses: actions/upload-artifact@v2
+          with:
+            name: flake8-report
+            path: flake8-report.txt
 
       - name: Run tests
         run: |
           python manage.py test
+        # Archive test reports as artifacts
+        - name: Archive test reports
+          if: always()  # Always archive, even if previous steps fail
+          uses: actions/upload-artifact@v2
+          with:
+            name: test-reports
+            path: |
+              ./logs/
+              ./coverage/
 
       - name: Set up Heroku CLI
         run: |
           wget -qO- https://toolbelt.heroku.com/install.sh | sh
           heroku --version  # Verify Heroku CLI installation
-     
-      - name: Archive artifacts
-        if: always()  # Always archive artifacts, even if previous steps fail
-        uses: actions/upload-artifact@v2
-        with:
-          name: django-artifacts
-          path: |
-            # Adjust the paths to include relevant artifacts
-            ./logs/
-            ./coverage/
